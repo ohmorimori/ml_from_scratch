@@ -6,6 +6,7 @@ if (dir_str not in sys.path):
 
 import numpy as np
 from utils import normalize, polynomial_features
+from utils import mean_squared_error
 
 class Regularization():
     """
@@ -97,7 +98,8 @@ class BaseRegression(object):
 
     def _loss(self, y_target, y_pred):
         #calculate loss
-        return np.mean(((y_pred - y_target)**2) / 2.0 + self.regularization(self.params['w']))
+        #divided by two for derivative calculation
+        return mean_squared_error(y_target, y_pred) / 2.0 + self.regularization(self.params['w'])
 
     def _update_coef(self, y_pred):
         #gradient of loss to weight(dL_dw, dL_db)

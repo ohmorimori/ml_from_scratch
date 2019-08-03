@@ -6,6 +6,7 @@ if (dir_str not in sys.path):
 import numpy as np
 #from utils import make_diagonal, Plot
 from utils import sigmoid
+from utils import cross_entropy_error
 from .regression import Regularization
 
 class LogisticRegression():
@@ -68,11 +69,12 @@ class LogisticRegression():
             self._update_coef(y_pred)
 
     def _calc_pred(self, X):
+        #calculate prediction
         return sigmoid(np.dot(X, self.params['w']) + self.params['b'])
 
     def _calc_loss(self, y_target, y_pred):
-        #here should be function from utils (mse, cross_entropy)
-        return - np.mean((y_target * np.log(y_pred)) + (1-y_target)*(np.log(1 - y_pred))) + self.regularization(self.params['w'])
+        #calculate loss
+        return cross_entropy_error(y_target, y_pred) + self.regularization(self.params['w'])
 
     def _update_coef(self, y_pred):
         #gradient of loss to weight(dL/dw, dL/db)
