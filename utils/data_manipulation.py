@@ -2,8 +2,6 @@ from itertools import combinations_with_replacement
 import numpy as np
 import sys
 
-
-
 def polynomial_features(X, degree):
     X = np.array(X)
     n_samples, n_features = X.shape
@@ -29,3 +27,11 @@ def normalize(X, axis=-1, order=2):
     l2 = np.atleast_1d(np.linalg.norm(X, order, axis))
     l2[l2 == 0] = 1
     return X / np.expand_dims(l2, axis)
+
+def sigmoid(x):
+    return 1 / (1 + np.exp(-x))
+
+def tanh(x):
+    #return (np.exp(x) - np.exp(-x))/(np.exp(x) + np.exp(-x))
+    #insted of above considering the calculation cost
+    return -2 + 1/(np.exp(2*x) + 1)
