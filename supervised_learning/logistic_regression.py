@@ -13,7 +13,12 @@ class LogisticRegression():
     Logistic Regression Classifier
     Parameters
     -------------
+    n_iterations: int
     learning_rate: float
+    alpha: float
+      coefficient for regularization term
+    l1_ratio: float (0-1)
+      the ratio that represents L1/(L1 + L2) for regularization term
     -------------
     """
     def __init__(self, n_iterations=100, learning_rate=1e-3, alpha=0, l1_ratio=0):
