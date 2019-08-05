@@ -40,7 +40,7 @@ class LogisticRegression():
         self._train()
 
     def predict(self, X_test):
-        #convert to np.array
+        X_test = np.array(X_test)
         return self._calc_pred(X_test)
 
     def _initialize_weights(self, n_features):
