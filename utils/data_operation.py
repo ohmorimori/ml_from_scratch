@@ -79,3 +79,22 @@ def get_random_subsets(X, y, n_subsets, replacements=True):
 
     return subsets
 
+def shuffle_data(X, y, seed=None):
+    X = np.array(X)
+    y = np.array(y)
+    if seed:
+        np.random.seed(seed)
+    idx = np.arange(X.shape[0])
+    np.random.shuffle(idx)
+    return X[idx], y[idx]
+
+def train_test_split(X, y, test_size=0.2, shuffle=True, seed=None):
+    if shuffle:
+        X, y = shuffle_data(X, y, seed)
+    #split the training dat afrom test data in the ratio specified in test size
+    idx = len(y) - int(len(y) // (1 / test_size))
+    X_train, X_test = X[:idx], X[idx:]
+    y_train, y_test = y[:idx], y[idx:]
+
+    return X_train, X_test, y_train, y_test
+
