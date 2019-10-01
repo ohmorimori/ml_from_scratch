@@ -50,19 +50,14 @@ class GradientBoosting(object):
 			grad = self.train_loss.backward(y, y_pred)
 			tree.fit(X, grad)
 			update = tree.predict(X)
-			#print("1: ", update.shape)
 			y_pred = y_pred - self.learning_rate * update.reshape(len(update), -1)
-			#print("2: ", y_pred.shape)
 	def predict(self, X_test):
 		X_test = np.array(X_test)
 		y_pred = np.array([])
 		for tree in self.trees:
 			update = tree.predict(X_test)
-			#print("3: ", update.shape)
 			update = self.learning_rate * update.reshape(len(update), -1)
-			#print("4: ", update.shape)
 			y_pred = -update if not y_pred.any() else y_pred - update
-			#print("5: ", y_pred.shape)
 		if not self.regression:
 			y_pred = softmax(y_pred)
 			y_pred = np.argmax(y_pred, axis=1)
