@@ -45,13 +45,12 @@ class DecisionTree(object):
         Recursive method which builds out the decision tree and splits X and respective y on the feature of X which (based on impurity) best separates the data
         """
         X = np.array(X)
-        y = np.array(y).reshape(-1, 1)
+        y = np.array(y).reshape(len(y), -1)
+
         largest_impurity = 0
         best_criteria = None #feature index and threshold
         best_sets = None #subsets of the data
 
-        #add y as last column of X
-        Xy = np.concatenate((X, y), axis=1)
         n_samples, n_features = np.shape(X)
 
         if (n_samples >= self.min_samples_split and current_depth <= self.max_depth):
@@ -64,13 +63,14 @@ class DecisionTree(object):
                 #iterate through all unique values of feature column i and calculate the impurity
                 for threshold in unique_values:
                     #devide X and y depending on if the feature value of X at index feature_idx meets the threshold
-                    Xy1, Xy2 = divide_on_feature(Xy, feature_idx, threshold)
+                    idx_1, idx_2 = divide_on_feature(X, feature_idx, threshold)
 
-                    if (len(Xy1) > 0 and len(Xy2) > 0):
-                        #select the y-values of the two sets
-                        y1 = Xy1[:, n_features:]
-                        y2 = Xy2[:, n_features:]
+                    X1 = X[idx_1, :]
+                    X2 = X[idx_2, :]
+                    y1 = y[idx_1, :]
+                    y2 = y[idx_2, :]
 
+                    if (len(X1) > 0 and len(X2) > 0):
                         #calculate impurity
                         impurity = self._impurity_calculation(y, y1, y2)
 
@@ -78,12 +78,7 @@ class DecisionTree(object):
                         if (impurity > largest_impurity):
                             largest_impurity = impurity
                             best_criteria = {"feature_idx": feature_idx, "threshold": threshold}
-                            best_sets = {
-                                "leftX": Xy1[:, :n_features],
-                                "lefty": Xy1[:, n_features:],
-                                "rightX": Xy2[:, :n_features],
-                                "righty": Xy2[:, n_features:]
-                            }
+                            best_sets = {"leftX": X1, "lefty": y1, "rightX": X2, "righty": y2}
         if (largest_impurity > self.min_impurity):
             #build subtree for the right and left branches
             true_branch = self._build_tree(best_sets["leftX"], best_sets["lefty"], current_depth+1)
@@ -123,7 +118,7 @@ class DecisionTree(object):
         """
         """
         y_pred = [self.predict_value(sample) for sample in X]
-        return y_pred
+        return np.array(y_pred)
 
     def print_tree(self, tree=None, indent=" "):
         """

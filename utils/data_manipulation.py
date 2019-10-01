@@ -35,3 +35,12 @@ def tanh(x):
     #return (np.exp(x) - np.exp(-x))/(np.exp(x) + np.exp(-x))
     #insted of above considering the calculation cost
     return -2 + 1/(np.exp(2*x) + 1)
+
+def relu(x):
+
+    return x
+
+def softmax(x):
+    #return (np.exp(x))/sum_i((np.exp(x_i))
+    e_x = np.exp(x).reshape(len(x), -1)
+    return e_x / (np.sum(e_x, axis=1).reshape(-1, 1))

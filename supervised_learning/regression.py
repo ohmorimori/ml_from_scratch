@@ -99,7 +99,7 @@ class BaseRegression(object):
     def _loss(self, y_target, y_pred):
         #calculate loss
         #divided by two for derivative calculation
-        return mean_squared_error(y_target, y_pred) / 2.0 + self.regularization(self.params['w'])
+        return mean_squared_error(y_target, y_pred) + self.regularization(self.params['w'])
 
     def _update_coef(self, y_pred):
         #gradient of loss to weight(dL_dw, dL_db)

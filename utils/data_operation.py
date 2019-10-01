@@ -2,9 +2,11 @@ import numpy as np
 import math
 
 def mean_squared_error(y_target, y_pred):
-    return np.mean(np.power(y_pred - y_target, 2))
+    return 0.5 * np.mean(np.power(y_pred - y_target, 2))
 
 def cross_entropy_error(y_target, y_pred):
+    #to avoid division by zero
+    y_pred = np.clip(y_pred, 1e-15, 1 - 1e-15)
     return - np.mean(y_target*(np.log(y_pred)) + (1 - y_target) * (np.log(1- y_pred)))
 
 def calculate_entropy(y):
@@ -30,15 +32,13 @@ def divide_on_feature(X, feature_idx, threshold):
     """
 
     if (isinstance(threshold, int) or (isinstance(threshold, float))):
-        split_func = lambda sample: sample[feature_idx] >= threshold
+        x1_idx = (X[:, feature_idx] >= threshold)
     else:
-        split_func = lambda sample: sample[feature_idx] == threshold
+        x1_idx = (X[:, feature_idx] == threshold)
 
-    X_1 = np.array([sample for sample in X if split_func(sample)])
-    X_2 = np.array([sample for sample in X if not split_func(sample)])
+    x2_idx = (-1 * (x1_idx - 1)).astype(bool)
 
-    return np.array([X_1, X_2])
-
+    return x1_idx, x2_idx
 
 def accuracy_score(y_true, y_pred):
     return np.sum(y_true == y_pred, axis=0)/len(y_true)
@@ -98,3 +98,11 @@ def train_test_split(X, y, test_size=0.2, shuffle=True, seed=None):
 
     return X_train, X_test, y_train, y_test
 
+def to_categorical(x):
+    """
+    One-hot encoding
+    """
+
+    eye = np.eye(len(np.unique(x)))
+    one_hot = eye[x]
+    return one_hot
