@@ -26,6 +26,10 @@ def calculate_variance(X):
     variance = (1/n_samples) * np.diag(np.dot((X - mean).T, X-mean))
     return variance
 
+def euclidean_distance(x1, x2):
+    error = x1 - x2
+    return np.sqrt(np.sum(np.power(error, 2)))
+
 def divide_on_feature(X, feature_idx, threshold):
     """
     Divide dataset based on if sample value on feature index is larger than the given threshold

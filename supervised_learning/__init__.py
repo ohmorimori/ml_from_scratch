@@ -6,3 +6,4 @@ from .random_forest import RandomForest
 from .adaboost import Adaboost
 from .bayesian_regression import BayesianRegression
 from .gradient_boosting import GradientBoostingRegressor, GradientBoostingClassifier
+from .k_nearest_neighbors import Knn
